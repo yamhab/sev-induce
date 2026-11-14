@@ -17,8 +17,8 @@ struct Population {
 
 impl Population {
     fn new(topology: &[usize], population_count: usize) -> Self {
-        let networks = vec![Network::new(&topology); population_count];
-        Self { networks: networks }
+        let networks = vec![Network::new(topology); population_count];
+        Self { networks }
     }
 
     fn mutate(&mut self, elite: usize, rate: f64, strength: f64, range: f64) {
@@ -154,7 +154,7 @@ impl Layer {
             Some(inputs) => {
                 for (i, output) in self.outputs.into_iter().enumerate() {
                     buffer[output] = buffer[self.biases.start + i];
-                    for (j, input) in inputs.into_iter().enumerate() {
+                    for (j, input) in inputs.iter().enumerate() {
                         buffer[output] += input * buffer[self.weights.start + i * inputs.len() + j];
                     }
                     buffer[output] = relu(buffer[output]);
@@ -186,11 +186,11 @@ fn relu(n: f64) -> f64 {
 }
 
 fn sigmoid(n: f64) -> f64 {
-    return 1.0 / (1.0 + f64::exp(-n));
+    1.0 / (1.0 + f64::exp(-n))
 }
 
 fn tanh(n: f64) -> f64 {
-    return n.tanh();
+    n.tanh()
 }
 
 fn main() {
